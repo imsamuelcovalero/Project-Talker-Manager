@@ -30,7 +30,7 @@ const validatePassword = (req, _res, next) => {
   const { password } = req.body;
 
   if (!password) throw new Error('O campo "password" é obrigatório');
-  if (!password.length > 5) throw new Error('O "password" deve ter pelo menos 6 caracteres');
+  if (password.length < 6) throw new Error('O "password" deve ter pelo menos 6 caracteres');
 
   next();
 };

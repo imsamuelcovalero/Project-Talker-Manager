@@ -13,10 +13,18 @@ app.use(express.json());
 const HTTP_OK_STATUS = 200;
 const PORT = '3000';
 
-app.post('/login', validateEmail, validatePassword, (_req, res) => {
+app.post('/login', validateEmail, validatePassword, (req, res) => {
   const token = crypto.randomBytes(8).toString('hex');
   return res.status(HTTP_OK_STATUS).json({
     token: `${token}`,
+  });
+});
+
+// Este tratamento de erro funciona para a rota de login
+app.use((err, _req, res, _next) => {
+  const { message } = err;
+  res.status(400).json({
+    message,
   });
 });
 
@@ -38,6 +46,7 @@ app.get('/', (_request, response) => {
   response.status(HTTP_OK_STATUS).send();
 });
 
+// Este tratamento de erro funciona para a rota talker e talker:id
 app.use((err, _req, res, _next) => {
   const { message } = err;
   res.status(404).json({
