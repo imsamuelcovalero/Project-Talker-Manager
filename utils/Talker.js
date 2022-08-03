@@ -3,6 +3,17 @@ const fs = require('fs').promises;
 const PATH = './talker.json';
 const middleware = require('./Middleware');
 
+const editPerson = async (id, requestPerson) => {
+  const persons = await middleware.getPersons();
+  const personsFiltered = persons.filter((person) => person.id !== id);
+  const personEdited = {
+    id,
+    ...requestPerson,
+  };
+  const newPersons = [...personsFiltered, personEdited];
+  await fs.writeFile(PATH, JSON.stringify(newPersons));
+};
+
 const insertPerson = async (newPerson) => {
   const persons = await middleware.getPersons();
   const newPersons = [...persons, newPerson];
@@ -70,7 +81,7 @@ const validateWatchedAt = (req, res, next) => {
 
 const validateRate = (req, res, next) => {
   const { talk: { rate } } = req.body;
-  if (!rate) {
+  if (!rate && rate !== 0) {
     return res.status(400)
       .json({ message: 'O campo "rate" é obrigatório' });
   }
@@ -89,4 +100,5 @@ module.exports = {
   validateTalk,
   validateWatchedAt,
   validateRate,
+  editPerson,
 };

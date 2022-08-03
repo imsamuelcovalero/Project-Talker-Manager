@@ -7,7 +7,7 @@ const crypto = require('crypto');
 const middleware = require('./utils/Middleware');
 const { validateEmail, validatePassword } = require('./utils/Middleware');
 const { insertPerson, verifyAuthorization, validateName, validateAge, validateTalk,
-  validateWatchedAt, validateRate } = require('./utils/Talker');
+  validateWatchedAt, validateRate, editPerson } = require('./utils/Talker');
 
 const app = express();
 app.use(express.json());
@@ -68,6 +68,15 @@ validateWatchedAt, validateRate, async (req, res) => {
   };
   insertPerson(newPerson);
   res.status(201).json(newPerson);
+});
+
+app.put('/talker/:id', verifyAuthorization, validateName, validateAge, validateTalk,
+validateWatchedAt, validateRate, async (req, res) => {
+  const requestPerson = req.body;
+  await editPerson(Number(req.params.id), requestPerson);
+  const newPersons = await middleware.getPersons();
+  const personEdited = newPersons.find((person) => person.id === Number(req.params.id));
+  res.status(200).json(personEdited);
 });
 
 // não remova esse endpoint,  e para o avaliador funcionar
