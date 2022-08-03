@@ -66,7 +66,7 @@ validateWatchedAt, validateRate, async (req, res) => {
       rate,
     },
   };
-  insertPerson(newPerson);
+  await insertPerson(newPerson);
   res.status(201).json(newPerson);
 });
 
@@ -80,7 +80,7 @@ validateWatchedAt, validateRate, async (req, res) => {
 });
 
 app.delete('/talker/:id', verifyAuthorization, async (req, res) => {
-  deletePerson(Number(req.params.id));
+  await deletePerson(Number(req.params.id));
   res.status(204).json();
 });
 
