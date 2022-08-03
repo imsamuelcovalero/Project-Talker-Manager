@@ -3,6 +3,12 @@ const fs = require('fs').promises;
 const PATH = './talker.json';
 const middleware = require('./Middleware');
 
+const deletePerson = async (id) => {
+  const persons = await middleware.getPersons();
+  const newPersons = persons.filter((pessoa) => pessoa.id !== Number(id));
+  await fs.writeFile(PATH, JSON.stringify(newPersons));
+};
+
 const editPerson = async (id, requestPerson) => {
   const persons = await middleware.getPersons();
   const personsFiltered = persons.filter((person) => person.id !== id);
@@ -101,4 +107,5 @@ module.exports = {
   validateWatchedAt,
   validateRate,
   editPerson,
+  deletePerson,
 };
