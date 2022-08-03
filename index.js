@@ -21,6 +21,20 @@ app.get('/talker', async (_req, res, next) => {
   next();
 });
 
+app.get('/talker/search', verifyAuthorization, async (req, res) => {
+  const { q } = req.query;
+  console.log('q', q);
+  const persons = await middleware.getPersons();
+  const personFiltered = persons.filter((person) => person.name.includes(q));
+  if (q === '' || q === undefined) {
+    return res.status(HTTP_OK_STATUS).json(persons);
+  } if (personFiltered.length === 0) {
+    res.status(HTTP_OK_STATUS).json([]);
+  } else {
+    res.status(HTTP_OK_STATUS).json(personFiltered);
+  }
+});
+
 app.get('/talker/:id', async (req, res, next) => {
   const { id } = req.params;
   const person = await middleware.getPersonId(id);
@@ -76,7 +90,7 @@ validateWatchedAt, validateRate, async (req, res) => {
   await editPerson(Number(req.params.id), requestPerson);
   const newPersons = await middleware.getPersons();
   const personEdited = newPersons.find((person) => person.id === Number(req.params.id));
-  res.status(200).json(personEdited);
+  res.status(HTTP_OK_STATUS).json(personEdited);
 });
 
 app.delete('/talker/:id', verifyAuthorization, async (req, res) => {
