@@ -1,8 +1,6 @@
 const express = require('express');
 require('express-async-errors');
-// const fs = require('fs').promises;
 
-// const generateToken = require('./generateToken');
 const crypto = require('crypto');
 const middleware = require('./utils/Middleware');
 const { validateEmail, validatePassword } = require('./utils/Middleware');
@@ -15,15 +13,8 @@ app.use(express.json());
 const HTTP_OK_STATUS = 200;
 const PORT = '3000';
 
-app.get('/talker', async (_req, res, next) => {
-  const persons = await middleware.getPersons();
-  res.status(HTTP_OK_STATUS).json(persons);
-  next();
-});
-
 app.get('/talker/search', verifyAuthorization, async (req, res) => {
   const { q } = req.query;
-  console.log('q', q);
   const persons = await middleware.getPersons();
   const personFiltered = persons.filter((person) => person.name.includes(q));
   if (q === '' || q === undefined) {
@@ -31,14 +22,20 @@ app.get('/talker/search', verifyAuthorization, async (req, res) => {
   } if (personFiltered.length === 0) {
     res.status(HTTP_OK_STATUS).json([]);
   } else {
-    res.status(HTTP_OK_STATUS).json(personFiltered);
+    res.status(HTTP_OK_STATUS).json(personFiltered, null, 2);
   }
+});
+
+app.get('/talker', async (_req, res, next) => {
+  const persons = await middleware.getPersons();
+  res.status(HTTP_OK_STATUS).json(persons, null, 2);
+  next();
 });
 
 app.get('/talker/:id', async (req, res, next) => {
   const { id } = req.params;
   const person = await middleware.getPersonId(id);
-  res.status(HTTP_OK_STATUS).json(person);
+  res.status(HTTP_OK_STATUS).json(person, null, 2);
   next();
 });
 
@@ -81,7 +78,7 @@ validateWatchedAt, validateRate, async (req, res) => {
     },
   };
   await insertPerson(newPerson);
-  res.status(201).json(newPerson);
+  res.status(201).json(newPerson, null, 2);
 });
 
 app.put('/talker/:id', verifyAuthorization, validateName, validateAge, validateTalk,
@@ -90,7 +87,7 @@ validateWatchedAt, validateRate, async (req, res) => {
   await editPerson(Number(req.params.id), requestPerson);
   const newPersons = await middleware.getPersons();
   const personEdited = newPersons.find((person) => person.id === Number(req.params.id));
-  res.status(HTTP_OK_STATUS).json(personEdited);
+  res.status(HTTP_OK_STATUS).json(personEdited, null, 2);
 });
 
 app.delete('/talker/:id', verifyAuthorization, async (req, res) => {
