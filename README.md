@@ -14,7 +14,7 @@ npm install
 * Para rodar o back-end:
   ```
   cd Project-Talker-Manager
- && docker-compose up -d
+  docker-compose up -d
   ```
 ## Executando Testes
 * Para rodar todos os testes:
