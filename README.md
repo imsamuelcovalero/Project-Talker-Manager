@@ -7,13 +7,14 @@ Back-end:
 ## Instalando Dependências
 > Backend
 ```bash
-cd api/ 
+cd Project-Talker-Manager
 npm install
 ``` 
 ## Executando aplicação
 * Para rodar o back-end:
   ```
-  cd api/ && npm start
+  cd Project-Talker-Manager
+ && docker-compose up -d
   ```
 ## Executando Testes
 * Para rodar todos os testes:
