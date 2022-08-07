@@ -15,6 +15,7 @@ npm install
   ```
   cd Project-Talker-Manager
   docker-compose up -d
+  npm run dev
   ```
 ## Executando Testes
 * Para rodar todos os testes:
