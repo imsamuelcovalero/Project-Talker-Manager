@@ -15,7 +15,7 @@ npm install
   ```
   cd Project-Talker-Manager
   docker-compose up -d
-  npm run dev
+  *A aplicação estará rodando na porta 3000: http://localhost:3000/ do navegador
   ```
 ## Executando Testes
 * Para rodar todos os testes:
